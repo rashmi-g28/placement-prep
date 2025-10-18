@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: feedback-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./db:/app      # persist SQLite database
+      - ./frontend:/app/frontend
+    environment:
+      - AWS_REGION=us-east-1
+    restart: always
+
+  frontend:
+    image: nginx:alpine
+    container_name: feedback-frontend
+    ports:
+      - "8000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    depends_on:
+      - backend
+    restart: always

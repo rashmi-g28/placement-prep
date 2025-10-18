@@ -1,0 +1,53 @@
+ 
+<!doctype html>
+<html ng-app="feedbackApp">
+<head>
+  <meta charset="utf-8">
+  <title>AI Feedback Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="app.js"></script>
+</head>
+<body ng-controller="MainCtrl as vm">
+  <div class="container">
+    <h1>AI-Powered Feedback Dashboard</h1>
+
+    <div class="card">
+      <h2>Submit Feedback</h2>
+      <form ng-submit="vm.submit()">
+        <input ng-model="vm.newFeedback.user" placeholder="Your name (optional)" />
+        <textarea ng-model="vm.newFeedback.text" placeholder="Write feedback..." required></textarea>
+        <select ng-model="vm.newFeedback.category">
+          <option value="product">Product</option>
+          <option value="service">Service</option>
+          <option value="other">Other</option>
+        </select>
+        <button type="submit">Send Feedback</button>
+      </form>
+      <p class="status" ng-if="vm.status">{{vm.status}}</p>
+    </div>
+
+    <div class="card">
+      <h2>Recent Feedbacks</h2>
+      <button ng-click="vm.loadFeedbacks()">Refresh</button>
+      <ul>
+        <li ng-repeat="f in vm.feedbacks">
+          <strong>{{f.id}} - {{f.user || 'Anonymous'}} ({{f.category}})</strong>
+          <div class="fb-text">{{f.text}}</div>
+          <small>{{f.created_at}}</small>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>AI Summary</h2>
+      <button ng-click="vm.getSummary()">Generate Summary (Bedrock)</button>
+      <div class="ai-summary" ng-if="vm.summary">
+        <h3>Summary</h3>
+        <pre>{{vm.summary}}</pre>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
